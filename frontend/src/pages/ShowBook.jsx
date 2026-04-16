@@ -17,7 +17,7 @@ const ShowBook = () => {
             .then((response) => {
                 // console.log(response)
                 setBook(response.data)
-                console.log(id)
+                // console.log(id)
                 setLoading(false)
             })
             .catch((error) => {
