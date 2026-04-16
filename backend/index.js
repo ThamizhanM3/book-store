@@ -4,10 +4,13 @@ import mongoose from 'mongoose';
 import { Book } from './models/bookModel.js';
 import booksRoute from './routes/booksRoute.js';
 import cors from 'cors';
+import dotenv from "dotenv";
 
 const app = express();
 
 app.use(express.json())
+
+dotenv.config();
 
 app.use(cors({
     origin: '*',
