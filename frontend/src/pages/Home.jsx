@@ -7,6 +7,7 @@ import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineAddBox, MdOutlineDelete } from "react-icons/md";
 import BooksCard from '../components/home/BooksCard';
 import BooksTable from '../components/home/BooksTable';
+import API from '../api'
 
 
 const Home = () => {
@@ -15,8 +16,8 @@ const Home = () => {
     const [showType, setShowType] = useState('table')
     useEffect(() => {
         setLoading(true)
-        axios
-            .get('https://book-store-or5q.onrender.com/books')
+        API
+            .get('/books')
             .then((response) => {
                 console.log(response)
                 setBooks(response.data.data)

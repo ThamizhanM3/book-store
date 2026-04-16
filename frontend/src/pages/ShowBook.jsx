@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
+import API from '../api'
 
 const ShowBook = () => {
     const [book, setBook] = useState({})
@@ -11,8 +12,8 @@ const ShowBook = () => {
 
     useEffect(() => {
         // setLoading(true)
-        axios
-            .get(`https://book-store-or5q.onrender.com/books/${id}`)
+        API
+            .get(`/books/${id}`)
             .then((response) => {
                 // console.log(response)
                 setBook(response.data)

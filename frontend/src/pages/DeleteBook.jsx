@@ -14,19 +14,19 @@ const DeleteBook = () => {
 
     const handleDeleteBook = () => {
         setLoading(true)
-        axios
-        .delete(`https://book-store-or5q.onrender.com/books/${id}`)
-        .then(() => {
+        API
+            .delete(`https://book-store-or5q.onrender.com/books/${id}`)
+            .then(() => {
             setLoading(false);
             enqueueSnackbar('Book Deleted Sucessfully', { variant: 'success' })
             navigate('/')
-        })
-        .catch((error) => {
-            setLoading(false);
-            alert('Error Occured, check Console');
-            enqueueSnackbar('Error', { variant: 'error' })
-            console.log(error)
-        })
+            })
+            .catch((error) => {
+                setLoading(false);
+                alert('Error Occured, check Console');
+                enqueueSnackbar('Error', { variant: 'error' })
+                console.log(error)
+            })
     }
     return (
         <div className='p-4'>

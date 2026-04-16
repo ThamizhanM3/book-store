@@ -4,6 +4,7 @@ import Spinner from '../components/Spinner'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSnackbar } from "notistack";
+import API from '../api'
 
 const EditBook = () => {
     const [title, setTitle] = useState('');
@@ -15,31 +16,31 @@ const EditBook = () => {
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
-        // setLoading(true);
-        // axios
-        //     .get(`https://book-store-or5q.onrender.com/books/${id}`)
-        //     .then((response) => {
-        //         setAuthor(response.data.author)
-        //         setTitle(response.data.title)
-        //         setPublishYear(response.data.publishYear)
-        //         setLoading(false)
-        //         console.log('hello')
-        //     })
-        //     .catch((error) => {
-            //         alert('error occured')
-            //         console.log(error)
-            //     })
-            fetchBook()
+        setLoading(true);
+        API
+            .get(`/books/${id}`)
+            .then((response) => {
+                setAuthor(response.data.author)
+                setTitle(response.data.title)
+                setPublishYear(response.data.publishYear)
+                setLoading(false)
+                console.log('hello')
+            })
+            .catch((error) => {
+                    alert('error occured')
+                    console.log(error)
+                })
+            // fetchBook()
     }, [])
 
-    const fetchBook = async () => {
-        const response = await fetch(`https://book-store-or5q.onrender.com/books/${id}`)
-        const data = await response.json()
-        setAuthor(data.author)
-        setTitle(data.title)
-        setPublishYear(data.publishYear)
+    // const fetchBook = async () => {
+    //     const response = await fetch(`https://book-store-or5q.onrender.com/books/${id}`)
+    //     const data = await response.json()
+    //     setAuthor(data.author)
+    //     setTitle(data.title)
+    //     setPublishYear(data.publishYear)
 
-    }
+    // }
 
     const handleEditBook = () => {
         const data = {
@@ -48,8 +49,8 @@ const EditBook = () => {
             publishYear
         };
         setLoading(true);
-        axios
-            .put(`https://book-store-or5q.onrender.com/books/${id}`, data)
+        API
+            .put(`/books/${id}`, data)
             .then(() => {
                 setLoading(false);
                 enqueueSnackbar('Book Edited Sucessfully', { variant: 'success' })
