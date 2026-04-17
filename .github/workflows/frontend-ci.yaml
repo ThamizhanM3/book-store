@@ -33,8 +33,21 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
+      # - name: Build Image
+      #   run: docker build -t book-store-frontend:${{ github.sha }} ./frontend
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Build Image
-        run: docker build -t book-store-frontend:${{ github.sha }} ./frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: false
+          load: true
+          tags: book-store-frontend:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Check Docker Image
         run: docker images
