@@ -89,8 +89,8 @@ jobs:
       
       - name: Docker Push
         run: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:${{ steps.version_tag.outputs.new_tag || github.sha }}
-          ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:${{ steps.version_tag.outputs.new_tag || github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:latest
 
       - name: Sucess Message
         run: echo "Sucessfully Done"
