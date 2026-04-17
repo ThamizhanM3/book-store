@@ -67,8 +67,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
-          push: true
-          # load: true
+          # push: true
+          load: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:${{ steps.version_tag.outputs.new_tag || github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:latest
@@ -86,6 +86,12 @@ jobs:
           exit-code: 1
           ignore-unfixed: true
           severity: CRITICAL,HIGH
+      
+      - name: Docker Push
+        if: sucess()
+        run: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:${{ steps.version_tag.outputs.new_tag || github.sha }}
+          ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:latest
 
       - name: Sucess Message
         run: echo "Sucessfully Done"
