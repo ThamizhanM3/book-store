@@ -7,6 +7,9 @@ on:
     paths:
       - frontend/**
 
+permissions:
+  contents: write
+
 jobs:
   frontend:
     runs-on: ubuntu-latest
@@ -39,6 +42,13 @@ jobs:
           projectBaseDir: ./frontend
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      
+      - name: Tagging
+        id: version_tag
+        if: github.ref == 'refs/heads/cicd'
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Build Image
       #   run: docker build -t book-store-frontend:${{ github.sha }} ./frontend
@@ -52,7 +62,9 @@ jobs:
           context: ./frontend
           push: false
           load: true
-          tags: book-store-frontend:${{ github.sha }}
+          tags: |
+            book-store-frontend:${{ steps.version_tag.outputs.new_tag || github.sha }}
+            book-store-frontend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -62,7 +74,7 @@ jobs:
       - name: Trivy Scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: book-store-frontend:${{ github.sha }}
+          image-ref: book-store-frontend:${{ steps.version_tag.outputs.new_tag || github.sha }}
           format: table
           exit-code: 1
           ignore-unfixed: true
