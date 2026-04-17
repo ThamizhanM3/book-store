@@ -12,7 +12,7 @@
 
 # CMD ["npm", "start"]
 
-FROM node:18-alpine ans builder
+FROM node:18-alpine as builder
 
 WORKDIR /app
 
