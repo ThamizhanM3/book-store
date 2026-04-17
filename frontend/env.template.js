@@ -1,0 +1,3 @@
+window.__ENV__ ={
+    VITE_APP_API_URL: "$VITE_APP_API_URL"
+}
