@@ -1,0 +1,39 @@
+name: Frontend-CI
+
+on:
+  push:
+    branches:
+      - devops
+    paths:
+      - frontend/**
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node Setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      
+      - name: Install Dependencies
+        run: |
+          cd frontend
+          npm install
+      
+      - name: Snyk Scan
+        uses: snyk/actions/node@master
+        with:
+          command:
+            - test
+            - monitor
+          args: --file=frontend/package.json
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Sucess Message
+        run: echo "Sucessfully Done"
