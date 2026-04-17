@@ -1,0 +1,30 @@
+version: "3.8"
+
+service:
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+  backend:
+    build: ./backend
+    container_name: book-back
+    ports:
+      - "5555:5555"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/bookstore
+      - PORT=5555
+    deponds_on:
+      - mongo
+  frontend:
+    build: ./frontend
+    container_name: book-front
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_APP_API_URL=http://backend:5555
+    depends_on: backend
+volumes:
+  mongo-data:
