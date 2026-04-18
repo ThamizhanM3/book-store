@@ -12,7 +12,7 @@
 
 # CMD ["npm", "start"]
 
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -22,7 +22,7 @@ RUN npm ci --omit=dev
 
 COPY . .
 
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
