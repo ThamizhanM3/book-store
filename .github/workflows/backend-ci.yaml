@@ -80,7 +80,7 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Image:
+      - name: Build Image
         uses: docker/build-push-action@v5
         with:
           context: ./backend 
