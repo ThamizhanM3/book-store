@@ -12,23 +12,19 @@
 
 # CMD ["npm", "start"]
 
-FROM node:18-alpine as builder
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci --omit=dev
 
 COPY . .
 
 FROM node:18-alpine
 
 WORKDIR /app
-
-COPY package*.json ./
-
-RUN npm ci --only=production
 
 COPY --from=builder /app .
 
