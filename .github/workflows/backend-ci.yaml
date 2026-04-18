@@ -93,7 +93,7 @@ jobs:
 
       - name: Build Image
         run: |
-          docker build -t backend ./backend
+          docker build --no-cache -t backend ./backend
 
       - name: Trivy Scan
         uses: aquasecurity/trivy-action@master

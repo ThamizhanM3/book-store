@@ -12,7 +12,7 @@
 
 # CMD ["npm", "start"]
 
-FROM node:20-slim AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -22,7 +22,7 @@ RUN npm install
 
 COPY . .
 
-FROM node:20-slim
+FROM node:20-alpine
 
 WORKDIR /app
 
