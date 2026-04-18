@@ -4,3 +4,5 @@ Dockerfile
 .git
 .gitignore
 .env
+Dockerfile
+README.md
