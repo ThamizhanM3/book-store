@@ -1,17 +1,17 @@
-name: Frontend-CI
+name: Backend-CI
 
 on:
   push:
     branches:
       - cicd
     paths:
-      - frontend/**
+      - backend/**
 
 permissions:
   contents: write
 
 jobs:
-  frontend:
+  backend:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,43 +24,41 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      
+
       - name: Install Dependencies
         run: |
-          cd frontend
+          cd backend
           npm install
-      
+
       - name: Snyk Scan
         uses: snyk/actions/node@master
         with:
           command: test
-          args: --file=frontend/package.json
+          args: --file=backend/package.json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Sonar Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
-          projectBaseDir: ./frontend
+          projectBaseDir: ./backend
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      
+
       - name: Tagging
         id: version_tag
         if: github.ref == 'refs/heads/cicd'
-        uses: mathieudutour/github-tag-action@v6.2
+        uses: mathieudutour/github-tag-action@6.2
         with:
-          tag_prefix: frontend-v
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: backend-v
+          github_token: ${{ secrets.GITHUB_TOKEN}}
           release_branches: cicd
-          bump_policy: conventional_commits
-          default_bump: patch
 
       - name: Extract Version
         id: extract_version
         run: |
           TAG=${{ steps.version_tag.outputs.new_tag }}
-          VERSION=${TAG#frontend-v}
+          VERSION=${TAG#backend-v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Extract Branch Name
@@ -82,30 +80,30 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Image
+      - name: Build Image:
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
+          context: ./backend 
           load: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:${{ env.IMAGE_TAG || github.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/book-store-backend:${{ env.IMAGE_TAG || github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/book-store-backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Trivy Scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:${{ env.IMAGE_TAG || github.sha }}
+          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/book-store-backend:${{ env.IMAGE_TAG || github.sha }}
           format: table
           exit-code: 1
           ignore-unfixed: true
           severity: CRITICAL,HIGH
-      
+
       - name: Docker Push
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:${{ env.IMAGE_TAG || github.sha }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/book-store-frontend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/book-store-backend:${{ env.IMAGE_TAG || github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/book-store-backend:latest
 
       - name: Sucess Message
         run: echo "Sucessfully Done"
