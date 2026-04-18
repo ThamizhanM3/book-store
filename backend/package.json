@@ -23,11 +23,5 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
-  },
-  "overrides": {
-    "glob": "^13.0.6",
-    "minimatch": "^10.2.5",
-    "tar": "^7.5.13",
-    "cross-spawn": "^7.0.6"
   }
 }
